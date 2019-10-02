@@ -1,5 +1,6 @@
-python-telegram-bot
+jinja2
 beautifulsoup4
 lxml
 requests
 python-dateutil
+flask

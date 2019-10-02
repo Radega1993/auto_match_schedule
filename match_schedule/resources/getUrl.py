@@ -2,7 +2,6 @@ from resources.getInfo import get_info, remove_tags
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
 import datetime
-import datetime
 import requests
 
 
@@ -87,9 +86,36 @@ def get_url(equipo):
 def get_all_data():
     equipos = ['infn','infv','infr','cadn','cadv','cadb','juvn','juvv','juvb','sen']
 
-    msg = ""
+    data = []
     for equipo in equipos:
-        msg += get_url(equipo) + '\n'
-        msg += "-------------------------" + '\n'
+        datateam = get_url(equipo)
+        data.append(datateam)
+    return data
 
-    return msg
+def get_header():
+    jornada = 1
+    jornada = get_jornada(jornada)
+    req = requests.get('http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4050&jornada='+str(jornada))
+    errorjornada = ['no data','no data','no data','no data','no data']
+
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    header = soup.div.h2
+    try:
+        nombre_liga, categoria, fase, grupo, vuelta = str(header).split('<br/>', 4)
+    except:
+        data.append(errorjornada)
+
+    jornada_box = soup.find("div", attrs={'id':'jornada_numero'})
+    try:
+        numero_jornada, date = str(jornada_box).split('<br/>', 4)
+    except:
+        numero_jornada = "Horaris no publicats encara"
+        date = "Horaris no publicats encara"
+
+    data = {
+        'jornada': remove_tags(numero_jornada),
+        'data': date
+    }
+
+    return data

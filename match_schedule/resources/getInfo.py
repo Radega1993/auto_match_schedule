@@ -13,12 +13,6 @@ def get_info(url):
 
     soup = BeautifulSoup(req.text, 'html.parser')
 
-    header = soup.div.h2
-    try:
-        nombre_liga, categoria, fase, grupo, vuelta = str(header).split('<br/>', 4)
-    except:
-        data.append(errorjornada)
-        
     jornada_box = soup.find("div", attrs={'id':'jornada_numero'})
     try:
         numero_jornada, date = str(jornada_box).split('<br/>', 4)
@@ -42,17 +36,15 @@ def get_info(url):
             if 'SANT QUIRZE' in str(element[0]) or 'SANT QUIRZE' in str(element[1]):
                 dataSQV.append(element)
 
-    msg = ""
-
-    msg += remove_tags(nombre_liga) + '\n'
-    msg += remove_tags(grupo) + '\n'
-    msg += remove_tags(numero_jornada) + '\n \n'
-
     for element in dataSQV:
-        msg += 'Local: '+ element[0] + '\n'
-        msg += 'Visitant: '+ element[1] + '\n'
-        msg += 'Día: '+ element[2] + '\n'
-        msg += 'Hora: '+ element[3] + '\n'
-        msg += 'Lloc: '+ element[4] + '\n \n'
+        data.append(element)
 
-    return msg
+    data = {
+        'Local': element[0],
+        'Visitant': element[1],
+        'Dia': element[2],
+        'Hora': element[3],
+        'Lloc': element[4],
+
+    }
+    return data
