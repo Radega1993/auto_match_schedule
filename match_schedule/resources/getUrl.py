@@ -2,6 +2,7 @@ from resources.getInfo import get_info, remove_tags
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
 import datetime
+from datetime import timedelta
 import requests
 
 
@@ -36,59 +37,59 @@ def get_jornada(jornada):
         return jornada
 
 
-def get_url(equipo):
-    jornada = 1
+def get_url(equipo, jornada):
     if equipo == 'infn':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4050&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'infv':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4120&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'infb':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4120&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'infr':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4114&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'cadn':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4040&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'cadv':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4094&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'cadb':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4092&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'juvn':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4038&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'juvv':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4093&jornada='+str(jornada)
         return get_info(url)
     elif equipo == 'juvb':
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4091&jornada='+str(jornada)
         return get_info(url)
     else:
-        jornada = get_jornada(jornada)
+        print("geting data from " + equipo)
         url = 'http://competicio.fcvoleibol.cat/competiciones.asp?v=18&torneo=4031&jornada='+str(jornada)
         return get_info(url)
 
 def get_all_data():
     equipos = ['infn','infv','infr','cadn','cadv','cadb','juvn','juvv','juvb','sen']
-
+    jornada = 1
+    jornada = get_jornada(jornada)
     data = []
     for equipo in equipos:
-        datateam = get_url(equipo)
+        datateam = get_url(equipo, jornada)
         data.append(datateam)
     return data
 
@@ -113,9 +114,13 @@ def get_header():
         numero_jornada = "Horaris no publicats encara"
         date = "Horaris no publicats encara"
 
-    data = {
+    result = {
         'jornada': remove_tags(numero_jornada),
-        'data': date
+        'data': remove_tags(date),
+        'nombre_liga': remove_tags(nombre_liga),
+        'categoria': remove_tags(categoria),
+        'fase': remove_tags(fase),
+        'grupo': remove_tags(grupo),
     }
 
-    return data
+    return result

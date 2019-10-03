@@ -12,18 +12,26 @@ log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-
-@app.route("/")
-def template_test():
+def render_template(header, body):
+    '''
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(
         searchpath='templates/')
     )
     template = env.get_template('table.html')
+    '''
+    return render_template('templates/table.html', header)
+
+@app.route("/")
+def main():
+
     header = get_header()
     log.info(header)
-    data = get_all_data()
-    log.info(data)
-    return template.render(header, data)
+    body = get_all_data()
+    log.info(body)
+
+    web = render_template(header, body)
+
+    print(web)
 
 
 if __name__ == '__main__':

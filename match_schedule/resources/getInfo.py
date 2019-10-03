@@ -47,4 +47,5 @@ def get_info(url):
         'Lloc': element[4],
 
     }
+
     return data
